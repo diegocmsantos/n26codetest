@@ -39,7 +39,7 @@ public class InMemoryTransactionCache implements TransactionCache {
                 try {
                     DelayedCacheObject delayedCacheObject = cleaningUpQueue.take();
                     cache.remove(delayedCacheObject.getKey(), delayedCacheObject.getReference());
-//                    statisticService.removeStatistic(delayedCacheObject.getReference().get(), cache.isEmpty());
+                    statisticService.updateStatistic();
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                 }
@@ -66,7 +66,7 @@ public class InMemoryTransactionCache implements TransactionCache {
             SoftReference<Transaction> reference = new SoftReference<>(value);
             cache.put(key, reference);
             cleaningUpQueue.put(new DelayedCacheObject(key, reference, expiryTime));
-//            statisticService.updateStatistic(value);
+            statisticService.updateStatistic();
         }
     }
 

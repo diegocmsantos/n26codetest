@@ -17,46 +17,7 @@ public class StatisticDaoDefault implements StatisticDao {
     @Autowired
     private TransactionService transactionService;
 
-    public void updateStatistics(Transaction transaction) {
-
-        statistic.setCount(statistic.getCount().add(new BigDecimal(1)));
-
-        statistic.setSum(statistic.getSum().add(transaction.getAmount()));
-
-        if (statistic.getCount() != null && statistic.getCount().compareTo(BigDecimal.ZERO) > 0) {
-            statistic.setAvg(statistic.getSum().divide(statistic.getCount(), 2, RoundingMode.HALF_DOWN));
-        }
-
-    }
-
-    @Override
-    public void removeStatistics(Transaction transaction, boolean cacheIsEmpty) {
-        statistic.setCount(statistic.getCount().subtract(new BigDecimal(1)));
-
-        statistic.setSum(statistic.getSum().subtract(transaction.getAmount()));
-        if (statistic.getCount() != null && statistic.getCount().compareTo(BigDecimal.ZERO) > 0) {
-            statistic.setAvg(statistic.getSum().divide(statistic.getCount(), 2, RoundingMode.HALF_DOWN));
-        }
-
-        if (cacheIsEmpty) {
-            statistic.setMax(BigDecimal.ZERO);
-            statistic.setMin(BigDecimal.ZERO);
-            statistic.setAvg(BigDecimal.ZERO);
-        }
-    }
-
-    @Override
-    public void clear() {
-        statistic.setMax(BigDecimal.ZERO);
-        statistic.setMin(BigDecimal.ZERO);
-        statistic.setSum(BigDecimal.ZERO);
-        statistic.setCount(BigDecimal.ZERO);
-        statistic.setAvg(BigDecimal.ZERO);
-
-    }
-
-    @Override
-    public Statistic getStatistics() {
+    public void updateStatistics() {
 
         clear();
 
@@ -83,6 +44,20 @@ public class StatisticDaoDefault implements StatisticDao {
             statistic.setAvg(statistic.getSum().divide(statistic.getCount(), 2, RoundingMode.HALF_DOWN));
         }
 
+    }
+
+    @Override
+    public void clear() {
+        statistic.setMax(BigDecimal.ZERO);
+        statistic.setMin(BigDecimal.ZERO);
+        statistic.setSum(BigDecimal.ZERO);
+        statistic.setCount(BigDecimal.ZERO);
+        statistic.setAvg(BigDecimal.ZERO);
+
+    }
+
+    @Override
+    public Statistic getStatistics() {
         return statistic;
     }
 }
